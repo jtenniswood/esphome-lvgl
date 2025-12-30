@@ -32,7 +32,7 @@ script:
             strcpy(time_buf, "--:--");
             ESP_LOGW("time", "Time not yet synced, showing placeholder");
           }
-          lv_label_set_text(id(display_time).obj, time_buf);
+          lv_label_set_text(id(display_time), time_buf);
           ESP_LOGI("time", "LVGL label update called");
 
 # Periodically try to update time display (every 10 seconds)
