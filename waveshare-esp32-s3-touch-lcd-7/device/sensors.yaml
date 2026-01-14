@@ -27,6 +27,17 @@ sensor:
     id: office_blind_position
     attribute: current_position
 
+  # Centauri Carbon Print Progress
+  - platform: homeassistant
+    entity_id: sensor.centauri_carbon_percent_complete
+    id: centauri_carbon_percent
+    on_value:
+      - lvgl.label.update:
+          id: print_progress_label
+          text:
+            format: "%.0f%%"
+            args: [ 'x' ]
+
 
 
 binary_sensor:

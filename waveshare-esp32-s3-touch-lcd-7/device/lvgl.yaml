@@ -352,3 +352,21 @@ lvgl:
                   service: light.toggle
                   data:
                     entity_id: light.office_network_rack
+
+        # Print Progress
+        - button: 
+            height: $button_height_single
+            width: $button_width
+            checkable: false
+            clickable: false
+            id: print_progress_button
+            styles: control
+            widgets:
+              - label:
+                  text_font: $icon_font
+                  align: top_left
+                  text: $printer
+              - label:
+                  align: bottom_left
+                  id: print_progress_label
+                  text: "--%"
