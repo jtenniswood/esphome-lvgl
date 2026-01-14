@@ -372,6 +372,7 @@ lvgl:
                     flex_align_cross: end
                   bg_opa: TRANSP
                   border_width: 0
+                  pad_all: 0
                   widgets:
                     - label:
                         text_font: roboto36_font
