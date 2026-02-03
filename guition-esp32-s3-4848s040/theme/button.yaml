@@ -5,8 +5,8 @@ substitutions:
   button_text_color: "0xFFFFFF"
   button_control_color: "0x313131"
   button_webhook_color: "0x212121"
-  button_height_single: 143px
-  button_height_double: 292px
+  button_height_single: 135px
+  button_height_double: 276px
   button_width: 140px
   padding: 12px
   radius: 8px
