@@ -902,10 +902,6 @@ lvgl:
             hidden: true
             widgets:
               - label:
-                  text_font: $icon_font
-                  align: top_left
-                  text: $aircon
-              - label:
                   text_font: roboto36_font
                   align: top_right
                   id: aircon_set_temp_label
@@ -913,4 +909,4 @@ lvgl:
                   text_color: 0xFFFFFF
               - label:
                   align: bottom_left
-                  text: "Set Temp"
+                  text: "Target"
