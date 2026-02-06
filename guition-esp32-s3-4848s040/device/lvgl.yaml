@@ -1283,7 +1283,7 @@ lvgl:
                     - homeassistant.service:
                         service: climate.set_temperature
                         data:
-                          entity_id: climate.central_heating
+                          entity_id: climate.office_radiator_thermostat
                           hvac_mode: heat
                           temperature: !lambda return (float)x / 2.0f;
 
@@ -1356,7 +1356,7 @@ lvgl:
                     - homeassistant.service:
                         service: climate.set_temperature
                         data:
-                          entity_id: climate.central_heating
+                          entity_id: climate.office_radiator_thermostat
                           hvac_mode: heat
                           temperature: !lambda |-
                             if (id(heating_target_temperature).has_state()) {
@@ -1386,7 +1386,7 @@ lvgl:
                     - homeassistant.service:
                         service: climate.set_temperature
                         data:
-                          entity_id: climate.central_heating
+                          entity_id: climate.office_radiator_thermostat
                           hvac_mode: heat
                           temperature: !lambda |-
                             if (id(heating_target_temperature).has_state()) {

@@ -192,7 +192,7 @@ sensor:
   # ===========================================================================
   # WHAT IT MONITORS:
   #   Current temperature reported by the heating thermostat
-  #   Watches: climate.central_heating (current_temperature)
+  #   Watches: climate.office_radiator_thermostat (current_temperature)
   #
   # WHAT IT UPDATES:
   #   The current temperature label and arc on the heating lab page
@@ -201,7 +201,7 @@ sensor:
   #   lvgl.yaml → heating_lab_current_label, heating_current_arc
   # ===========================================================================
   - platform: homeassistant
-    entity_id: climate.central_heating
+    entity_id: climate.office_radiator_thermostat
     id: heating_current_temperature
     attribute: current_temperature
     on_value:
@@ -241,7 +241,7 @@ sensor:
   # ===========================================================================
   # WHAT IT MONITORS:
   #   Target/set temperature reported by the heating thermostat
-  #   Watches: climate.central_heating (temperature)
+  #   Watches: climate.office_radiator_thermostat (temperature)
   #
   # WHAT IT UPDATES:
   #   The target temperature label and arc on the heating lab page
@@ -250,7 +250,7 @@ sensor:
   #   lvgl.yaml → heating_lab_target_label, heating_target_arc
   # ===========================================================================
   - platform: homeassistant
-    entity_id: climate.central_heating
+    entity_id: climate.office_radiator_thermostat
     id: heating_target_temperature
     attribute: temperature
     on_value:
@@ -298,7 +298,7 @@ text_sensor:
   # ===========================================================================
   # WHAT IT MONITORS:
   #   Current action reported by the heating thermostat (heating/off/idle)
-  #   Watches: climate.central_heating (hvac_action)
+  #   Watches: climate.office_radiator_thermostat (hvac_action)
   #
   # WHAT IT UPDATES:
   #   The mode label on the heating lab page
@@ -307,7 +307,7 @@ text_sensor:
   #   lvgl.yaml → heating_lab_mode_label
   # ===========================================================================
   - platform: homeassistant
-    entity_id: climate.central_heating
+    entity_id: climate.office_radiator_thermostat
     id: heating_hvac_action
     attribute: hvac_action
     on_value:
