@@ -864,26 +864,6 @@ lvgl:
               - lvgl.page.show: main_page
 
         # =========================================================================
-        # BUTTON: Aircon Lab (Experimental Layout)
-        # =========================================================================
-        - button: 
-            height: $button_height_single
-            width: $button_width
-            checkable: false
-            id: aircon_lab_nav_button
-            styles: control
-            widgets:
-              - label:
-                  text_font: $icon_font
-                  align: top_left
-                  text: $aircon
-              - label:
-                  align: bottom_left
-                  text: "Lab"
-            on_click:
-              - lvgl.page.show: aircon_lab_page
-
-        # =========================================================================
         # BUTTON: Aircon Temperature
         # =========================================================================
         # WHAT THIS BUTTON DOES:
