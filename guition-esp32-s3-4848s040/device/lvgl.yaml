@@ -81,8 +81,6 @@ lvgl:
       pad_bottom: 5
       pad_left: 5
       pad_right: 5
-      pad_row: $padding
-      pad_column: $padding
       
       widgets:
       
@@ -461,8 +459,6 @@ lvgl:
       pad_bottom: 5
       pad_left: 5
       pad_right: 5
-      pad_row: $padding
-      pad_column: $padding
 
       widgets:
 
