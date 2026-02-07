@@ -26,8 +26,9 @@ lvgl:
   pages:
     - id: main_page
       layout: 
-        type: flex
-        flex_flow: column_wrap
+        type: grid
+        grid_columns: [fr(1), fr(1), fr(1)]
+        grid_rows: [fr(1), fr(1), fr(1)]
       width: 100%
       bg_color: Black
       bg_opa: cover
