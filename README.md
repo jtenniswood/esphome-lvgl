@@ -24,9 +24,9 @@ This repository contains ESPHome configurations for creating beautiful, touch-en
 
 You can find the supported panels on AliExpress. Links are placeholders for now.
 
-- **Guition ESP32-P4 JC1060P470 (10.6")**: `https://www.aliexpress.com/item/REPLACE_ME`
-- **Guition ESP32-S3 4848S040 (4.0")**: `https://www.aliexpress.com/item/REPLACE_ME`
-- **Waveshare ESP32-S3 Touch LCD 7"**: `https://www.aliexpress.com/item/REPLACE_ME`
+- **Guition ESP32-P4 JC1060P470 (10.6")**: `https://s.click.aliexpress.com/e/_c335W0r5`
+- **Guition ESP32-S3 4848S040 (4.0")**: `https://s.click.aliexpress.com/e/_c3sIhvBv`
+- **Waveshare ESP32-S3 Touch LCD 7"**: `https://s.click.aliexpress.com/e/_c37ljk8J`
 
 
 ## Quick Start
