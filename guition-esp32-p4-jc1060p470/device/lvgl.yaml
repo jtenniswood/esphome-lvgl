@@ -256,12 +256,12 @@ lvgl:
                   widgets:
                     - label:
                         text_font: statistics_font
-                        text_color: 0xFFFFFF
+                        text_color: $button_text_color
                         id: print_progress_label
                         text: "--"
                     - label:
                         text_font: label_font
-                        text_color: 0xFFFFFF
+                        text_color: $button_text_color
                         text: "%"
                         pad_bottom: 6
               - label:
@@ -305,10 +305,12 @@ lvgl:
                   widgets:
                     - label:
                         text_font: statistics_font
+                        text_color: $button_text_color
                         id: dryer_humidity_label
                         text: "--"
                     - label:
                         text_font: label_font
+                        text_color: $button_text_color
                         text: "%"
                         pad_bottom: 6
                         pad_left: -4

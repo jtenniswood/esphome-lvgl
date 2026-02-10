@@ -5,7 +5,7 @@ substitutions:
   button_control_color: "0x313131"
   button_height: 130px
   button_width: 200px
-  padding: 12px
+  padding: 14px
   radius: 8px
 
 lvgl:
