@@ -115,6 +115,7 @@ lvgl:
                   data:
                     entity_id: media_player.office
 
+        # Play/pause: two icon labels; visibility toggled by sensors.yaml from state
         - button:
             id: media_play_pause_button
             x: 192
@@ -124,11 +125,19 @@ lvgl:
             styles: control_round
             widgets:
               - label:
-                  id: media_play_pause_icon
+                  id: media_play_icon
+                  text_font: $icon_font
+                  align: center
+                  text: $play
+                  text_color: 0xFFFFFF
+                  hidden: false
+              - label:
+                  id: media_pause_icon
                   text_font: $icon_font
                   align: center
                   text: $pause
                   text_color: 0xFFFFFF
+                  hidden: true
             on_press:
               - homeassistant.service:
                   service: media_player.media_play_pause
