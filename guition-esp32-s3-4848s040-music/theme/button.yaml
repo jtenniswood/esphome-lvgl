@@ -25,11 +25,6 @@ lvgl:
       bg_color: $button_control_color
       radius: 36px
 
-    # Force bar dimensions (bar widget often ignores inline width/height in ESPHome).
-    - id: progress_bar_size
-      width: 480
-      height: 4
-
   theme:
     button:
       text_font: $text_font
