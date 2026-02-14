@@ -1,0 +1,45 @@
+font:
+  - file: "gfonts://Roboto"
+    id: roboto17_font
+    size: 17
+    bpp: 4
+
+  - file: "gfonts://Roboto"
+    id: roboto36_font
+    size: 36
+    bpp: 4
+
+  - file: "gfonts://Roboto"
+    id: roboto48_font
+    size: 48
+    bpp: 4
+
+  - file: "gfonts://Roboto"
+    id: roboto72_font
+    size: 72
+    bpp: 4
+
+  - file: "gfonts://Roboto"
+    id: roboto44_font
+    size: 44
+    bpp: 4
+
+  - file: "gfonts://Roboto"
+    id: roboto19_font
+    size: 19
+    bpp: 4
+
+  - file: "gfonts://Roboto"
+    id: roboto18_font
+    size: 18
+    bpp: 4
+
+  - file: "gfonts://Roboto"
+    id: roboto15_font
+    size: 15
+    bpp: 4
+
+lvgl:
+  style_definitions:
+    - id: roboto15_style
+      text_font: roboto18_font

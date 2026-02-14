@@ -1,0 +1,230 @@
+# =============================================================================
+# HARDWARE CONFIGURATION - Guition ESP32-S3-4848S040
+# =============================================================================
+# This file defines the physical hardware settings for the ESP32 touchscreen.
+# It tells ESPHome how to communicate with the display, touchscreen, and
+# other components on this specific device.
+#
+# WARNING: These settings are specific to the Guition ESP32-S3-4848S040.
+#          Using this config with a different device may cause issues.
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# PROCESSOR / BOARD
+# -----------------------------------------------------------------------------
+# Defines which ESP32 chip and development framework to use.
+# - board: The ESP32-S3 development kit configuration
+# - framework: esp-idf is Espressif's official development framework
+#              (more powerful than Arduino, required for this display)
+# -----------------------------------------------------------------------------
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: esp-idf
+
+
+# -----------------------------------------------------------------------------
+# ESPHOME DEVICE IDENTITY
+# -----------------------------------------------------------------------------
+# Basic device information visible in Home Assistant.
+# - name: Internal hostname (used for mDNS, e.g., device-name.local)
+# - friendly_name: Human-readable name shown in Home Assistant UI
+# - area: Which room/area this device belongs to in Home Assistant
+#
+# These values come from variables ($name, etc.) defined in template.yaml
+# -----------------------------------------------------------------------------
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+  area: ${room}
+
+
+# -----------------------------------------------------------------------------
+# OVER THE AIR (OTA) UPDATES
+# -----------------------------------------------------------------------------
+# Allows updating the firmware wirelessly without plugging in USB.
+# Once configured, you can flash new code from ESPHome dashboard.
+# -----------------------------------------------------------------------------
+ota:
+  platform: esphome
+
+
+# -----------------------------------------------------------------------------
+# HOME ASSISTANT API
+# -----------------------------------------------------------------------------
+# Enables communication between this device and Home Assistant.
+# Without this, the device won't appear in Home Assistant.
+# The encryption key is typically set in your secrets.yaml file.
+# -----------------------------------------------------------------------------
+api:
+
+
+# -----------------------------------------------------------------------------
+# LOGGING
+# -----------------------------------------------------------------------------
+# Outputs debug messages for troubleshooting.
+# View logs in ESPHome dashboard or via serial connection.
+# -----------------------------------------------------------------------------
+logger:
+
+
+# -----------------------------------------------------------------------------
+# PSRAM (External Memory)
+# -----------------------------------------------------------------------------
+# The display requires extra memory for graphics. PSRAM is external RAM
+# soldered onto the board that supplements the ESP32's internal memory.
+# - mode: octal = 8-bit data bus (faster than quad mode)
+# - speed: 80MHz clock speed for memory access
+#
+# Without this, the display won't have enough memory for the framebuffer.
+# -----------------------------------------------------------------------------
+psram:
+  mode: octal
+  speed: 80MHz
+
+
+# -----------------------------------------------------------------------------
+# BACKLIGHT CONTROL
+# -----------------------------------------------------------------------------
+# The display backlight is controlled via PWM (pulse width modulation).
+# This allows dimming the screen brightness from 0-100%.
+# - pin: GPIO38 controls the backlight
+# - frequency: 150Hz PWM frequency (fast enough to avoid flicker)
+# - min_power: Minimum brightness level (1% - prevents fully dark)
+# - zero_means_zero: When set to 0, backlight turns completely off
+#
+# This output is used by the backlight component in addon/backlight.yaml
+# -----------------------------------------------------------------------------
+output:
+  - platform: ledc
+    id: backlight_output
+    pin: GPIO38
+    frequency: 150Hz
+    min_power: 0.01
+    zero_means_zero: true
+
+
+# -----------------------------------------------------------------------------
+# SPI BUS (Display Communication)
+# -----------------------------------------------------------------------------
+# SPI (Serial Peripheral Interface) is how the ESP32 sends data to the display.
+# - clk_pin: Clock signal (GPIO48) - synchronizes data transfer
+# - mosi_pin: Master Out Slave In (GPIO47) - data sent TO the display
+#
+# This SPI bus is used by the display configuration below.
+# -----------------------------------------------------------------------------
+spi:
+  - id: lcd_spi
+    clk_pin: GPIO48
+    mosi_pin: GPIO47
+
+
+# -----------------------------------------------------------------------------
+# I2C BUS (Touchscreen Communication)
+# -----------------------------------------------------------------------------
+# I2C is how the ESP32 communicates with the touchscreen controller.
+# - sda: Data line (GPIO19)
+# - scl: Clock line (GPIO45)
+# - ignore_strapping_warning: GPIO45 is a "strapping pin" used during boot.
+#   This warning is expected and can be safely ignored for this device.
+#
+# This I2C bus is used by the touchscreen configuration below.
+# -----------------------------------------------------------------------------
+i2c:
+  id: touchscreen_bus
+  sda: GPIO19
+  scl:
+    number: 45
+    ignore_strapping_warning: true
+
+
+# -----------------------------------------------------------------------------
+# TOUCHSCREEN (GT911 Controller)
+# -----------------------------------------------------------------------------
+# The GT911 is the touch controller chip on this display.
+# It detects finger touches and reports X/Y coordinates.
+# - display: Links to the display so touch coordinates match screen position
+#
+# Touch events are automatically forwarded to LVGL for button presses.
+# -----------------------------------------------------------------------------
+touchscreen:
+  - platform: gt911
+    id: tft_touch
+    display: tft_display
+
+
+# -----------------------------------------------------------------------------
+# DISPLAY (ST7701S LCD Controller)
+# -----------------------------------------------------------------------------
+# This is the main display configuration. The ST7701S is the LCD driver chip.
+#
+# DIMENSIONS:
+# - 480x480 pixels (square display)
+#
+# SPI SETTINGS:
+# - spi_mode: MODE3 - clock polarity/phase for this display
+# - data_rate: 2MHz - speed for sending commands (not pixel data)
+#
+# COLOR:
+# - color_order: RGB - red, green, blue pixel order
+# - invert_colors: False - don't invert (black stays black, white stays white)
+#
+# CONTROL PINS:
+# - cs_pin: Chip Select (GPIO39) - enables the display
+# - de_pin: Data Enable (GPIO18) - signals valid pixel data
+# - hsync_pin: Horizontal Sync (GPIO16) - start of each row
+# - vsync_pin: Vertical Sync (GPIO17) - start of each frame
+# - pclk_pin: Pixel Clock (GPIO21) - timing for each pixel
+#
+# TIMING:
+# - pclk_frequency: 12MHz pixel clock (how fast pixels are drawn)
+# - hsync/vsync pulse_width, front/back_porch: Timing margins required
+#   by the display. These values are specific to this hardware.
+#
+# PERFORMANCE:
+# - update_interval: never - LVGL manages screen updates, not ESPHome
+# - auto_clear_enabled: False - don't auto-clear (LVGL handles this)
+#
+# INIT SEQUENCE:
+# - Special commands sent to the display on startup
+# - These configure internal display settings
+#
+# DATA PINS:
+# - RGB data pins for sending color information (active matrix display)
+# - red: 5 pins (5 bits), green: 6 pins (6 bits), blue: 5 pins (5 bits)
+# - This is RGB565 format (16-bit color = 65,536 colors)
+# -----------------------------------------------------------------------------
+display:
+  - platform: st7701s
+    id: tft_display
+    dimensions:
+      width: 480
+      height: 480
+    spi_mode: MODE3
+    data_rate: 2MHz
+    color_order: RGB
+    invert_colors: False
+    cs_pin: 39
+    de_pin: 18
+    hsync_pin: 16
+    vsync_pin: 17
+    pclk_pin: 21
+    pclk_frequency: 12MHz
+    pclk_inverted: False
+    hsync_pulse_width: 8
+    hsync_front_porch: 10
+    hsync_back_porch: 20
+    vsync_pulse_width: 8
+    vsync_front_porch: 10
+    vsync_back_porch: 10
+    update_interval: never
+    auto_clear_enabled: False
+    init_sequence:
+      - 1
+      - [0xFF, 0x77, 0x01, 0x00, 0x00, 0x10] # CMD2_BKSEL_BK0
+      - [0xCD, 0x00] # disable MDT flag
+    data_pins:
+      red: [11, 12, 13, 14, 0]
+      green: [8, 20, 3, 46, 9, 10]
+      blue: [4, 5, 6, 7, 15]
