@@ -7,6 +7,30 @@
 # Album art base URL: http://192.168.1.30:8123 (path from HA already includes token).
 # =============================================================================
 
+# Refresh progress bar and elapsed time every second (HA only pushes position occasionally)
+interval:
+  - interval: 1s
+    then:
+      - lvgl.label.update:
+          id: media_elapsed_label
+          text: !lambda |-
+            if (!id(media_position_sensor).has_state()) return std::string("0:00");
+            char buf[12];
+            int sec = (int)id(media_position_sensor).state;
+            if (sec < 0) sec = 0;
+            int m = sec / 60;
+            int s = sec % 60;
+            snprintf(buf, sizeof(buf), "%02d:%02d", m, s);
+            return std::string(buf);
+      - lvgl.bar.update:
+          id: media_progress_bar
+          value: !lambda |-
+            if (!id(media_position_sensor).has_state() || !id(media_duration_sensor).has_state()) return 0;
+            float pos = id(media_position_sensor).state;
+            float dur = id(media_duration_sensor).state;
+            if (dur > 0) return (int)((pos / dur) * 100.0f);
+            return 0;
+
 text_sensor:
   - platform: homeassistant
     entity_id: media_player.office
@@ -49,8 +73,8 @@ text_sensor:
       - lvgl.label.update:
           id: media_play_pause_icon
           text: !lambda |-
-            if (x == "playing") return std::string("\xEF\x83\xA4");  // mdi-pause U+F03E4
-            return std::string("\xEF\x84\x8D");  // mdi-play U+F040D
+            if (x == "playing") return std::string("\xEF\x81\xA4");  // mdi-pause U+F03E4
+            return std::string("\xEF\x81\x8D");  // mdi-play U+F040D
 
 sensor:
   - platform: homeassistant

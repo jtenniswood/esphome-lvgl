@@ -20,6 +20,7 @@ lvgl:
           text_color: 0xFFFFFF
 
   pages:
+    # Content area: 480 - 12*2 = 456 wide; 480 - 34 - 12 = 434 tall (after top_layer + padding)
     - id: main_page
       scrollbar_mode: "off"
       width: 100%
@@ -27,17 +28,17 @@ lvgl:
       bg_color: 0x1E1E1E
       pad_top: 34
       pad_bottom: 12
-      pad_left: 16
-      pad_right: 16
+      pad_left: 12
+      pad_right: 12
 
       widgets:
-        # Album art (top)
+        # Album art (top) - 456x200 fits content width
         - image:
             id: album_art_widget
             x: 0
             y: 0
             width: 100%
-            height: 240px
+            height: 200px
             src: album_art_image
 
         # Song title
@@ -45,7 +46,7 @@ lvgl:
             id: media_title_label
             text: "—"
             x: 0
-            y: 248
+            y: 206
             width: 100%
             text_font: roboto19_font
             text_color: 0xFFFFFF
@@ -56,7 +57,7 @@ lvgl:
             id: media_artist_label
             text: "—"
             x: 0
-            y: 272
+            y: 226
             width: 100%
             text_font: roboto15_font
             text_color: 0xB0B0B0
@@ -67,16 +68,17 @@ lvgl:
             id: media_elapsed_label
             text: "0:00"
             x: 0
-            y: 302
+            y: 250
+            width: 40px
             text_font: roboto15_font
             text_color: 0xFFFFFF
 
-        # Progress bar
+        # Progress bar (between time labels: 40 + 8 + 360 + 8 + 40 = 456)
         - bar:
             id: media_progress_bar
             x: 48
-            y: 302
-            width: 384px
+            y: 252
+            width: 360px
             height: 8px
             min_value: 0
             max_value: 100
@@ -92,20 +94,20 @@ lvgl:
         - label:
             id: media_duration_label
             text: "0:00"
-            x: 432
-            y: 302
+            x: 416
+            y: 250
             width: 40px
             text_font: roboto15_font
             text_color: 0xFFFFFF
             text_align: right
 
-        # Control buttons row (previous, play/pause, next)
+        # Control buttons: 72px each, centered in 456 (152 + 72 + 116 + 72 + 116 + 72 + 56)
         - button:
             id: media_prev_button
-            x: 72
-            y: 328
-            width: 80px
-            height: 80px
+            x: 24
+            y: 282
+            width: 72px
+            height: 72px
             styles: control
             widgets:
               - label:
@@ -121,10 +123,10 @@ lvgl:
 
         - button:
             id: media_play_pause_button
-            x: 200
-            y: 320
-            width: 80px
-            height: 80px
+            x: 192
+            y: 282
+            width: 72px
+            height: 72px
             styles: control
             bg_color: 0x2196F3
             widgets:
@@ -142,10 +144,10 @@ lvgl:
 
         - button:
             id: media_next_button
-            x: 328
-            y: 328
-            width: 80px
-            height: 80px
+            x: 360
+            y: 282
+            width: 72px
+            height: 72px
             styles: control
             widgets:
               - label:

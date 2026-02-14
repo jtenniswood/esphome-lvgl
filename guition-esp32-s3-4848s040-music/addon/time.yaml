@@ -1,4 +1,4 @@
-# Snmp Time
+# SNTP Time
 time:
   - platform: sntp
     id: sntp_time
@@ -9,11 +9,12 @@ time:
      - 2.pool.ntp.org
     on_time_sync:
       - script.execute: time_update
-    on_time:
-      - minutes: '*'
-        seconds: 0
-        then:
-          - script.execute: time_update
+
+# Update clock every second so display_time is always current
+interval:
+  - interval: 1s
+    then:
+      - script.execute: time_update
 
 # Clock
 script:
