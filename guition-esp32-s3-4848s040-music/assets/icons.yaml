@@ -1,6 +1,6 @@
 # http://materialdesignicons.com/cdn/7.4.47/
 # Icons used by the music dashboard (device/lvgl.yaml): prev, play/pause, next
-# MaterialDesign-Webfont TTF uses BMP PUA range U+E000–U+F8FF; codepoints are U+Exxxx.
+# MaterialDesign-Webfont TTF uses codepoints U+F03xx / U+F04xx (PUA).
 
 font:
   - file: 'https://github.com/Templarian/MaterialDesign-Webfont/raw/v7.4.47/fonts/materialdesignicons-webfont.ttf'
@@ -8,13 +8,13 @@ font:
     size: 40
     bpp: 4
     glyphs:
-      - "\U000E04AE"  # mdi-skip-previous
-      - "\U000E040D"  # mdi-play
-      - "\U000E03E4"  # mdi-pause
-      - "\U000E04AD"  # mdi-skip-next
+      - "\U000F04AE"  # mdi-skip-previous
+      - "\U000F040D"  # mdi-play
+      - "\U000F03E4"  # mdi-pause
+      - "\U000F04AD"  # mdi-skip-next
 
 substitutions:
-  skip_previous: "\U000E04AE"
-  play:          "\U000E040D"
-  pause:         "\U000E03E4"
-  skip_next:     "\U000E04AD"
+  skip_previous: "\U000F04AE"
+  play:          "\U000F040D"
+  pause:         "\U000F03E4"
+  skip_next:     "\U000F04AD"
