@@ -12,6 +12,7 @@ lvgl:
     # Content area: 480 - 12*2 = 456 wide; full height with 12px padding
     - id: main_page
       scrollbar_mode: "off"
+      scrollable: false
       width: 100%
       height: 100%
       bg_color: 0x1E1E1E
@@ -82,22 +83,23 @@ lvgl:
             text_color: 0xFFFFFF
             text_align: right
 
-        # Progress bar above the control buttons
+        # Progress bar above the control buttons (full width, white played / 50% black unplayed)
         - bar:
             id: media_progress_bar
-            x: 48
+            x: 0
             y: 352
-            width: 360px
+            width: 100%
             height: 8px
             min_value: 0
             max_value: 100
             value: 0
             indicator:
-              bg_color: 0x2196F3
-              radius: 4
+              bg_color: 0xFFFFFF
+              radius: 0
             main:
-              bg_color: 0x505050
-              radius: 4
+              bg_color: 0x000000
+              bg_opa: 128
+              radius: 0
 
         # Control buttons: 72px round, at bottom of screen
         - button:
