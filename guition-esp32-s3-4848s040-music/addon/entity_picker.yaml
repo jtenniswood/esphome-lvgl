@@ -1,0 +1,158 @@
+# =============================================================================
+# ENTITY PICKER - Dynamic media player switching
+# =============================================================================
+# Subscribes to HA helpers (input_text + template sensors) to:
+#   1. Populate the LVGL roller with all available media_player entities
+#   2. Track which entity is currently active
+#   3. Switch the active entity when the user taps a roller item
+#   4. Reset playback position display on entity change
+#
+# Requires HA-side configuration — see README.md for the input_text and
+# template sensor YAML to add to your Home Assistant configuration.yaml.
+# =============================================================================
+
+# ---------------------------------------------------------------------------
+# TEXT SENSORS — entity list and active player selection
+# ---------------------------------------------------------------------------
+text_sensor:
+  # Newline-separated list of media_player entity_ids (e.g. "media_player.office\nmedia_player.kitchen")
+  - platform: homeassistant
+    entity_id: sensor.media_players_list
+    attribute: entity_ids
+    id: media_players_entity_ids
+    on_value:
+      - lambda: |-
+          // Also update the roller options with friendly names if available
+          if (id(media_players_friendly_names).has_state() && !id(media_players_friendly_names).state.empty()) {
+            auto names = id(media_players_friendly_names).state;
+            lv_roller_set_options(id(entity_roller)->obj, names.c_str(), LV_ROLLER_MODE_NORMAL);
+          }
+
+  # Newline-separated list of friendly names (e.g. "Office Sonos\nKitchen Sonos")
+  - platform: homeassistant
+    entity_id: sensor.media_players_list
+    attribute: friendly_names
+    id: media_players_friendly_names
+    on_value:
+      - lambda: |-
+          if (!x.empty()) {
+            lv_roller_set_options(id(entity_roller)->obj, x.c_str(), LV_ROLLER_MODE_NORMAL);
+          }
+          // Sync roller selection to current active player
+          if (id(active_media_player_sensor).has_state()) {
+            std::string ids = id(media_players_entity_ids).has_state() ? id(media_players_entity_ids).state : "";
+            std::string active = id(active_media_player_sensor).state;
+            int idx = 0;
+            size_t start = 0;
+            for (size_t i = 0; i <= ids.size(); i++) {
+              if (i == ids.size() || ids[i] == '\n') {
+                if (ids.substr(start, i - start) == active) {
+                  lv_roller_set_selected(id(entity_roller)->obj, idx, LV_ANIM_OFF);
+                  break;
+                }
+                idx++;
+                start = i + 1;
+              }
+            }
+          }
+
+  # Currently selected entity_id from the HA input_text helper
+  - platform: homeassistant
+    entity_id: input_text.esphome_active_player
+    id: active_media_player_sensor
+    on_value:
+      # --- Sync roller selection to match ---
+      - lambda: |-
+          if (!id(media_players_entity_ids).has_state()) return;
+          std::string ids = id(media_players_entity_ids).state;
+          int idx = 0;
+          size_t start = 0;
+          for (size_t i = 0; i <= ids.size(); i++) {
+            if (i == ids.size() || ids[i] == '\n') {
+              if (ids.substr(start, i - start) == x) {
+                lv_roller_set_selected(id(entity_roller)->obj, idx, LV_ANIM_OFF);
+                break;
+              }
+              idx++;
+              start = i + 1;
+            }
+          }
+      # --- Update the active speaker label on the main page ---
+      - lvgl.label.update:
+          id: active_speaker_label
+          text: !lambda |-
+            if (!id(media_players_entity_ids).has_state() || !id(media_players_friendly_names).has_state())
+              return x;
+            std::string ids = id(media_players_entity_ids).state;
+            std::string names = id(media_players_friendly_names).state;
+            // Find index of x in entity_ids
+            int target_idx = -1;
+            int idx = 0;
+            size_t start = 0;
+            for (size_t i = 0; i <= ids.size(); i++) {
+              if (i == ids.size() || ids[i] == '\n') {
+                if (ids.substr(start, i - start) == x) { target_idx = idx; break; }
+                idx++;
+                start = i + 1;
+              }
+            }
+            if (target_idx < 0) return x;
+            // Find friendly name at same index
+            idx = 0;
+            start = 0;
+            for (size_t i = 0; i <= names.size(); i++) {
+              if (i == names.size() || names[i] == '\n') {
+                if (idx == target_idx) return names.substr(start, i - start);
+                idx++;
+                start = i + 1;
+              }
+            }
+            return x;
+      # --- Reset playback position tracking for the new entity ---
+      - lambda: |-
+          id(last_media_position) = 0.0f;
+          id(last_position_timestamp) = 0;
+      - lvgl.label.update:
+          id: media_elapsed_label
+          text: "00:00"
+      - lvgl.label.update:
+          id: media_duration_label
+          text: "00:00"
+      - lvgl.bar.update:
+          id: media_progress_bar
+          value: 0
+
+# ---------------------------------------------------------------------------
+# SCRIPT — called when the user taps an item in the roller
+# ---------------------------------------------------------------------------
+# Reads the roller's selected index, maps it to the corresponding entity_id,
+# sends the selection to HA, waits briefly, then navigates back to main_page.
+script:
+  - id: entity_picker_select
+    then:
+      - homeassistant.service:
+          service: input_text.set_value
+          data_template:
+            entity_id: input_text.esphome_active_player
+            value: "{{ selected_entity }}"
+          variables:
+            selected_entity: !lambda |-
+              uint16_t idx = lv_roller_get_selected(id(entity_roller)->obj);
+              std::string ids = id(media_players_entity_ids).state;
+              size_t start = 0;
+              int current = 0;
+              for (size_t i = 0; i <= ids.size(); i++) {
+                if (i == ids.size() || ids[i] == '\n') {
+                  if (current == (int)idx) {
+                    return ids.substr(start, i - start);
+                  }
+                  current++;
+                  start = i + 1;
+                }
+              }
+              return ids;
+      - delay: 500ms
+      - lvgl.page.show:
+          id: main_page
+          animation: MOVE_TOP
+          duration: 300ms

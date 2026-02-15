@@ -1,10 +1,11 @@
 # =============================================================================
-# SENSORS - Music dashboard (media_player.office)
+# SENSORS - Music dashboard (dynamic media player)
 # =============================================================================
-# Subscribes to media_player attributes and updates LVGL labels, bar, image,
-# and play/pause icon. To use a different entity, override in your main YAML
-# with a package override or use a local copy and set entity_id.
-# Album art base URL: http://192.168.1.30:8123 (path from HA already includes token).
+# Subscribes to HA trigger-based template sensors that proxy the active media
+# player's attributes. The active player is selected via the entity picker
+# (addon/entity_picker.yaml) which writes to input_text.esphome_active_player.
+#
+# See README.md for the required HA template sensor configuration.
 # =============================================================================
 
 # Default TV source name (override in your main YAML substitutions if needed)
@@ -12,7 +13,7 @@ substitutions:
   tv_source: "TV"
 
 # Store last HA position and time so we can estimate elapsed time between updates
-# (HA/Sonos often only push media_position every 5–10s; we tick every 1s)
+# (HA template sensors poll every 2s; we tick every 1s for smooth progress)
 globals:
   - id: last_media_position
     type: float
@@ -35,7 +36,7 @@ interval:
                 text: !lambda |-
                   float pos = id(last_position_timestamp) != 0 && id(media_position_sensor).has_state()
                     ? id(media_position_sensor).state : id(last_media_position);
-                  if (id(media_player_state_sensor).state == "playing") {
+                  if (id(media_player_state_sensor).has_state() && id(media_player_state_sensor).state == "playing") {
                     auto t = id(sntp_time).now();
                     if (t.is_valid() && id(last_position_timestamp) != 0) {
                       pos = id(last_media_position) + (t.timestamp - id(last_position_timestamp));
@@ -56,7 +57,7 @@ interval:
                 value: !lambda |-
                   float pos = id(last_position_timestamp) != 0 && id(media_position_sensor).has_state()
                     ? id(media_position_sensor).state : id(last_media_position);
-                  if (id(media_player_state_sensor).state == "playing") {
+                  if (id(media_player_state_sensor).has_state() && id(media_player_state_sensor).state == "playing") {
                     auto t = id(sntp_time).now();
                     if (t.is_valid() && id(last_position_timestamp) != 0) {
                       pos = id(last_media_position) + (t.timestamp - id(last_position_timestamp));
@@ -69,15 +70,16 @@ interval:
                   if (dur > 0) return (int)((pos / dur) * 100.0f);
                   return 0;
 
+# ---------------------------------------------------------------------------
+# TEXT SENSORS — subscribe to HA trigger-based template sensors
+# ---------------------------------------------------------------------------
 text_sensor:
   - platform: homeassistant
-    entity_id: ${media_player}
+    entity_id: sensor.active_media_title
     id: media_title_sensor
-    attribute: media_title
     on_value:
-      # Track changed (skip/next) — reset position to 0 and stamp the current
-      # time so the 1-second interval timer can immediately start counting
-      # from 0 for the new track (avoids stale timestamp = 0 blocking updates).
+      # Track changed — reset position to 0 and stamp the current time so the
+      # 1-second interval timer can immediately start counting from 0.
       - lambda: |-
           id(last_media_position) = 0.0f;
           auto t = id(sntp_time).now();
@@ -98,18 +100,16 @@ text_sensor:
           value: 0
 
   - platform: homeassistant
-    entity_id: ${media_player}
+    entity_id: sensor.active_media_artist
     id: media_artist_sensor
-    attribute: media_artist
     on_value:
       - lvgl.label.update:
           id: media_artist_label
           text: !lambda 'return x.empty() ? std::string("—") : x;'
 
   - platform: homeassistant
-    entity_id: ${media_player}
+    entity_id: sensor.active_entity_picture
     id: media_entity_picture_sensor
-    attribute: entity_picture
     on_value:
       - if:
           condition:
@@ -123,7 +123,7 @@ text_sensor:
                   return std::string("${home_assistant_url}") + path;
 
   - platform: homeassistant
-    entity_id: ${media_player}
+    entity_id: sensor.active_media_state
     id: media_player_state_sensor
     on_value:
       - if:
@@ -141,9 +141,8 @@ text_sensor:
                 id: media_pause_icon
 
   - platform: homeassistant
-    entity_id: ${media_player}
+    entity_id: sensor.active_media_source
     id: media_source_sensor
-    attribute: source
     on_value:
       - if:
           condition:
@@ -171,11 +170,13 @@ text_sensor:
             - lvgl.widget.show: media_progress_bar
             - lvgl.widget.hide: tv_source_label
 
+# ---------------------------------------------------------------------------
+# NUMERIC SENSORS — duration and position from HA template sensors
+# ---------------------------------------------------------------------------
 sensor:
   - platform: homeassistant
-    entity_id: ${media_player}
+    entity_id: sensor.active_media_duration
     id: media_duration_sensor
-    attribute: media_duration
     on_value:
       - lvgl.label.update:
           id: media_duration_label
@@ -189,9 +190,8 @@ sensor:
             return std::string(buf);
 
   - platform: homeassistant
-    entity_id: ${media_player}
+    entity_id: sensor.active_media_position
     id: media_position_sensor
-    attribute: media_position
     on_value:
       - lambda: |-
           id(last_media_position) = x;

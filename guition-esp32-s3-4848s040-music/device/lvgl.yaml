@@ -1,14 +1,19 @@
 # =============================================================================
 # LVGL MUSIC DASHBOARD
 # =============================================================================
-# Single-screen now-playing view for Sonos (media_player.office).
+# Now-playing view with dynamic media player switching.
+# Swipe down on the main page to open the entity picker.
 # Data from sensors.yaml; album art from online_image (addon/music.yaml).
+# Entity picker logic in addon/entity_picker.yaml.
 # =============================================================================
 
 lvgl:
   buffer_size: 100%
 
   pages:
+    # =========================================================================
+    # MAIN PAGE — now-playing view
+    # =========================================================================
     # Full 480px content width (no horizontal padding) so progress bar can span edge-to-edge.
     # Top padding 12px, no bottom padding (progress bar flush to bottom edge).
     # Text/buttons use 12px horizontal inset via x/width.
@@ -22,6 +27,11 @@ lvgl:
       pad_bottom: 0
       pad_left: 0
       pad_right: 0
+      on_swipe_down:
+        - lvgl.page.show:
+            id: entity_picker_page
+            animation: MOVE_BOTTOM
+            duration: 300ms
 
       widgets:
         # Full-screen artwork background (negative offsets cancel page padding)
@@ -33,6 +43,31 @@ lvgl:
             height: 480px
             src: album_art_background
             opa: 100%
+
+        # Active speaker name + swipe hint at top of screen
+        - label:
+            id: active_speaker_label
+            text: "—"
+            x: 12
+            y: 0
+            width: 420px
+            height: 20px
+            long_mode: dot
+            text_font: roboto15_font
+            text_color: 0xFFFFFF
+            opa: 70%
+            text_align: left
+
+        - label:
+            id: swipe_hint_icon
+            text: $chevron_down
+            x: 440
+            y: -4
+            width: 40px
+            text_font: $icon_font
+            text_color: 0xFFFFFF
+            opa: 30%
+            text_align: center
 
         # Song title + artist sit on the same row as the control buttons (left side)
         - label:
@@ -84,8 +119,10 @@ lvgl:
             on_press:
               - homeassistant.service:
                   service: media_player.media_play_pause
-                  data:
-                    entity_id: ${media_player}
+                  data_template:
+                    entity_id: "{{ entity_id }}"
+                  variables:
+                    entity_id: !lambda 'return id(active_media_player_sensor).state;'
 
         - button:
             id: media_next_button
@@ -104,8 +141,10 @@ lvgl:
             on_press:
               - homeassistant.service:
                   service: media_player.media_next_track
-                  data:
-                    entity_id: ${media_player}
+                  data_template:
+                    entity_id: "{{ entity_id }}"
+                  variables:
+                    entity_id: !lambda 'return id(active_media_player_sensor).state;'
 
         - button:
             id: media_previous_button
@@ -124,8 +163,10 @@ lvgl:
             on_press:
               - homeassistant.service:
                   service: media_player.media_previous_track
-                  data:
-                    entity_id: ${media_player}
+                  data_template:
+                    entity_id: "{{ entity_id }}"
+                  variables:
+                    entity_id: !lambda 'return id(active_media_player_sensor).state;'
 
         # TV mode: centered source label, shown only when source is "TV"
         - label:
@@ -172,3 +213,60 @@ lvgl:
             indicator:
               bg_color: 0xFFFFFF
               radius: 0
+
+    # =========================================================================
+    # ENTITY PICKER PAGE — swipe down to reveal, select a media player
+    # =========================================================================
+    - id: entity_picker_page
+      scrollbar_mode: "off"
+      scrollable: false
+      width: 100%
+      height: 100%
+      bg_color: 0x1E1E1E
+      pad_all: 0
+      on_swipe_up:
+        - lvgl.page.show:
+            id: main_page
+            animation: MOVE_TOP
+            duration: 300ms
+
+      widgets:
+        - label:
+            text: "Select Speaker"
+            x: 0
+            y: 30
+            width: 480px
+            text_font: roboto30_font
+            text_color: 0xFFFFFF
+            text_align: center
+
+        # Roller populated dynamically from HA sensor.media_players_list
+        # Tapping an item immediately switches the active entity and returns.
+        - roller:
+            id: entity_roller
+            y: 90
+            x: 20
+            width: 440px
+            height: 320px
+            options: "Loading..."
+            mode: normal
+            visible_row_count: 5
+            selected:
+              text_color: 0xFFFFFF
+              bg_color: 0xFF8C00
+              bg_opa: 100%
+            items:
+              text_color: 0x909090
+            text_font: roboto19_font
+            on_click:
+              - script.execute: entity_picker_select
+
+        # Subtle hint at bottom
+        - label:
+            text: "Swipe up to go back"
+            x: 0
+            y: 440
+            width: 480px
+            text_font: roboto15_font
+            text_color: 0x606060
+            text_align: center
