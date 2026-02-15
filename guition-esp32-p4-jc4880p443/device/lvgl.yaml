@@ -32,10 +32,11 @@ lvgl:
     - id: main_page
       layout: 
         type: flex
-        flex_flow: column_wrap
+        flex_flow: row_wrap
         pad_row: 10
         pad_column: 10
       width: 100%
+      scrollable: false
       bg_color: Black
       bg_opa: cover
       pad_top: 42
