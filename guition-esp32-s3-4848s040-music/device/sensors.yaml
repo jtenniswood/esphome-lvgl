@@ -8,10 +8,6 @@
 # See README.md for the required HA template sensor configuration.
 # =============================================================================
 
-# Default TV source name (override in your main YAML substitutions if needed)
-substitutions:
-  tv_source: "TV"
-
 # Store last HA position and time so we can estimate elapsed time between updates
 # (HA template sensors poll every 2s; we tick every 1s for smooth progress)
 globals:
@@ -29,7 +25,7 @@ interval:
     then:
       - if:
           condition:
-            lambda: 'return !id(media_source_sensor).has_state() || id(media_source_sensor).state != "${tv_source}";'
+            lambda: 'return !id(media_source_sensor).has_state() || id(media_source_sensor).state != "TV";'
           then:
             - lvgl.label.update:
                 id: media_elapsed_label
@@ -146,7 +142,7 @@ text_sensor:
     on_value:
       - if:
           condition:
-            lambda: 'return x == "${tv_source}";'
+            lambda: 'return x == "TV";'
           then:
             # --- Enter TV mode ---
             - lvgl.widget.hide: album_art_background_widget

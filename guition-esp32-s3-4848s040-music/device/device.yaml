@@ -209,8 +209,10 @@ touchscreen:
             - logger.log: "Swipe left -> next track"
             - homeassistant.service:
                 service: media_player.media_next_track
-                data:
-                  entity_id: ${media_player}
+                data_template:
+                  entity_id: "{{ entity_id }}"
+                variables:
+                  entity_id: !lambda 'return id(active_media_player_sensor).state;'
       - if:
           condition:
             lambda: 'return id(swipe_direction) == 1;'
@@ -218,8 +220,10 @@ touchscreen:
             - logger.log: "Swipe right -> previous track"
             - homeassistant.service:
                 service: media_player.media_previous_track
-                data:
-                  entity_id: ${media_player}
+                data_template:
+                  entity_id: "{{ entity_id }}"
+                variables:
+                  entity_id: !lambda 'return id(active_media_player_sensor).state;'
 
 
 # -----------------------------------------------------------------------------
