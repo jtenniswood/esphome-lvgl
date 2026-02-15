@@ -31,7 +31,7 @@ lvgl:
         - lvgl.page.show:
             id: entity_picker_page
             animation: MOVE_BOTTOM
-            duration: 300ms
+            time: 300ms
 
       widgets:
         # Full-screen artwork background (negative offsets cancel page padding)
@@ -228,7 +228,7 @@ lvgl:
         - lvgl.page.show:
             id: main_page
             animation: MOVE_TOP
-            duration: 300ms
+            time: 300ms
 
       widgets:
         - label:
