@@ -60,7 +60,7 @@ sensor:
   #   lvgl.yaml → temperatures label (id: temperatures)
   # ===========================================================================
   - platform: homeassistant
-    entity_id: sensor.office_temperature
+    entity_id: sensor.bewegungsmelder_buro_temperature
     id: office_temperature
     on_value:
       - lvgl.label.update:
@@ -92,7 +92,7 @@ sensor:
   #   lvgl.yaml → temperatures label (id: temperatures)
   # ===========================================================================
   - platform: homeassistant
-    entity_id: sensor.outdoor_temperature
+    entity_id: sensor.temperature_6
     id: outdoor_temperature
     on_value:
       - lvgl.label.update:
