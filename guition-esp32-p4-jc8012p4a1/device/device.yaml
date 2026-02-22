@@ -16,11 +16,11 @@ esphome:
     board_build.flash_mode: dio
 
 # Over the Air Updates
-# ota:
-#   platform: esphome
+ota:
+  platform: esphome
 
 # Enable Home Assistant API
-# api:
+api:
 
 # Enable logging
 logger:
@@ -113,18 +113,11 @@ touchscreen:
             text:
               format: "Touch at %d/%d"
               args: [touch.x, touch.y]
-
-lvgl:
-  buffer_size: 100%
-  byte_order: little_endian
-  displays:
-    - my_display
-  touchscreens:
-    - my_touchscreen
-  widgets:
-    - label:
-        id: txtlbl
-        text_color: black
-        text: "ESPHOME"
-        align: CENTER
-        text_font: montserrat_48
+    on_release:
+      then:
+        - if:
+            condition: lvgl.is_paused
+            then:
+              - light.turn_on: display_backlight
+              - lvgl.resume:
+              - lvgl.widget.redraw:

@@ -1,10 +1,10 @@
 packages:
   device: !include device/device.yaml
-  # sensors: !include device/sensors.yaml
-  # lvgl: !include device/lvgl.yaml
-  # time: !include addon/time.yaml
-  # backlight: !include addon/backlight.yaml
-  # network: !include addon/network.yaml
-  # fonts: !include assets/fonts.yaml
-  # icons: !include assets/icons.yaml
-  # button: !include theme/button.yaml
+  sensors: !include device/sensors.yaml
+  lvgl: !include device/lvgl.yaml
+  time: !include addon/time.yaml
+  backlight: !include addon/backlight.yaml
+  network: !include addon/network.yaml
+  fonts: !include assets/fonts.yaml
+  icons: !include assets/icons.yaml
+  button: !include theme/button.yaml
