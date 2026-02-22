@@ -7,12 +7,6 @@ esp32:
     type: esp-idf
     advanced:
       enable_idf_experimental_features: true
-      disable_vfs_support_termios: false
-      disable_vfs_support_select: false
-      disable_vfs_support_dir: false
-    sdkconfig_options:
-      CONFIG_SPIRAM_XIP_FROM_PSRAM: "y"   # Stop screen flashing during OTA
-      CONFIG_SDMMC_HOST_DEFAULT: "y"
 
 # Esphome
 esphome:
