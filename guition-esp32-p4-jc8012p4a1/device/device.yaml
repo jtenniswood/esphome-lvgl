@@ -1,6 +1,5 @@
 # Designed for guition-esp32-p4-jc8012p4a1
 esp32:
-  board: esp32-p4-function-ev-board
   variant: ESP32P4
   flash_size: 16MB
   cpu_frequency: 400MHz
