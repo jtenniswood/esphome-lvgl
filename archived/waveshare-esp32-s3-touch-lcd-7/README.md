@@ -2,7 +2,7 @@
 
 7-inch touch LCD panel with ESP32-S3, running ESPHome and LVGL for home automation and sensor displays.
 
-![Waveshare ESP32-S3 Touch LCD 7](../images/waveshare-esp32-s3-touch-lcd-7.jpg)
+![Waveshare ESP32-S3 Touch LCD 7](../../images/waveshare-esp32-s3-touch-lcd-7.jpg)
 
 ## Configuration
 
@@ -27,4 +27,4 @@ waveshare-esp32-s3-touch-lcd-7/
 ├── esphome.yaml    # ESPHome config template
 ```
 
-Customize for your setup by editing the YAML files under `device/`, `addon/`, and `theme/`. See the [main README](../README.md) for full quick start and ESPHome setup.
+Customize for your setup by editing the YAML files under `device/`, `addon/`, and `theme/`. See the [main README](../../README.md) for full quick start and ESPHome setup.

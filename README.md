@@ -20,15 +20,24 @@ This repository contains ESPHome configurations for creating beautiful, touch-en
 
 ## Supported Devices
 
-**[Guition ESP32-P4 JC1060P470](guition-esp32-p4-jc1060p470/README.md)** (7", ~£40)
+| Device | Size | Configuration |
+|--------|------|---------------|
+| [Waveshare ESP32-P4-WIFI6-Touch-LCD-4B](waveshare-esp32-p4-wifi6-touch-lcd-4b/README.md) | 4.0" 720x720 | [esphome.yaml](waveshare-esp32-p4-wifi6-touch-lcd-4b/esphome.yaml) |
+| [Guition ESP32-P4 JC1060P470](guition-esp32-p4-jc1060p470/README.md) | 7" | [esphome.yaml](guition-esp32-p4-jc1060p470/esphome.yaml) |
+| [Guition ESP32-P4 JC8012P4A1](guition-esp32-p4-jc8012p4a1/README.md) | 10.1" | [esphome.yaml](guition-esp32-p4-jc8012p4a1/esphome.yaml) |
+| [Guition ESP32-P4 JC4880P443](guition-esp32-p4-jc4880p443/README.md) | 4.3" | [esphome.yaml](guition-esp32-p4-jc4880p443/esphome.yaml) |
+| [Guition ESP32-S3 4848S040](guition-esp32-s3-4848s040/README.md) | 4.0" | [esphome.yaml](guition-esp32-s3-4848s040/esphome.yaml) |
 
 ![Guition ESP32-P4 JC1060P470](images/guition-esp32-p4-jc1060p470.jpg)
-
-**[Guition ESP32-S3 4848S040](guition-esp32-s3-4848s040/README.md)** (4.0", ~£16)
-
 ![Guition ESP32-S3 4848S040](images/guition-esp32-s3-4848s040.jpg)
 
-**[Waveshare ESP32-S3 Touch LCD 7"](waveshare-esp32-s3-touch-lcd-7/README.md)** (~£40)
+## Archived Devices
+
+These configs are kept for reference but are no longer listed as current supported devices.
+
+| Device | Configuration |
+|--------|---------------|
+| [Waveshare ESP32-S3 Touch LCD 7"](archived/waveshare-esp32-s3-touch-lcd-7/README.md) | [esphome.yaml](archived/waveshare-esp32-s3-touch-lcd-7/esphome.yaml) |
 
 ![Waveshare ESP32-S3 Touch LCD 7](images/waveshare-esp32-s3-touch-lcd-7.jpg)
 
@@ -36,9 +45,12 @@ This repository contains ESPHome configurations for creating beautiful, touch-en
 
 | Device | Configuration | Where to Buy |
 |--------|---------------|--------------|
+| Waveshare ESP32-P4-WIFI6-Touch-LCD-4B (4.0", 720x720) | [esphome.yaml](waveshare-esp32-p4-wifi6-touch-lcd-4b/esphome.yaml) | [Waveshare](https://www.waveshare.com/esp32-p4-wifi6-touch-lcd-4b.htm) |
 | Guition ESP32-P4 JC1060P470 (7") | [esphome.yaml](guition-esp32-p4-jc1060p470/esphome.yaml) | [AliExpress](https://s.click.aliexpress.com/e/_c335W0r5) |
+| Guition ESP32-P4 JC8012P4A1 (10.1") | [esphome.yaml](guition-esp32-p4-jc8012p4a1/esphome.yaml) | Search by model name |
+| Guition ESP32-P4 JC4880P443 (4.3") | [esphome.yaml](guition-esp32-p4-jc4880p443/esphome.yaml) | Search by model name |
 | Guition ESP32-S3 4848S040 (4.0") | [esphome.yaml](guition-esp32-s3-4848s040/esphome.yaml) | [AliExpress](https://s.click.aliexpress.com/e/_c3sIhvBv) |
-| Waveshare ESP32-S3 Touch LCD 7" | [esphome.yaml](waveshare-esp32-s3-touch-lcd-7/esphome.yaml) | [AliExpress](https://s.click.aliexpress.com/e/_c37ljk8J) |
+| Waveshare ESP32-S3 Touch LCD 7" (archived) | [esphome.yaml](archived/waveshare-esp32-s3-touch-lcd-7/esphome.yaml) | [AliExpress](https://s.click.aliexpress.com/e/_c37ljk8J) |
 
 ## Stands
 
@@ -48,7 +60,7 @@ Desk/desktop stands (3D printable models on MakerWorld):
 |--------|-------|
 | Guition ESP32-P4 JC1060P470 (7") | [Link](https://makerworld.com/en/models/2387421-guition-esp32p4-jc1060p470-7inch-screen-desk-mount#profileId-2614995) |
 | Guition ESP32-S3 4848S040 (4.0") | [Link](https://makerworld.com/en/models/2327976-touch-screen-desktop-stand-for-guition-4848s040#profileId-2543111) |
-| Waveshare ESP32-S3 Touch LCD 7" | [Link](https://makerworld.com/en/models/1009516-desk-stand-for-7inch-waveshare-touch-screen#profileId-2439605) |
+| Waveshare ESP32-S3 Touch LCD 7" (archived) | [Link](https://makerworld.com/en/models/1009516-desk-stand-for-7inch-waveshare-touch-screen#profileId-2439605) |
 
 ## How to get it working
 

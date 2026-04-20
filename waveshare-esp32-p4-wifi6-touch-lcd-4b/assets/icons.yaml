@@ -1,0 +1,61 @@
+# http://materialdesignicons.com/cdn/7.4.47/
+
+# Define icons used
+font:
+  - file: 'https://github.com/Templarian/MaterialDesign-Webfont/raw/v7.4.47/fonts/materialdesignicons-webfont.ttf'
+    id: icon_font
+    size: 60
+    bpp: 4
+    glyphs: [
+      "\U000F0335",  # mdi-lightbulb
+      "\U000F042B",  # mdi-printer-3d
+      "\U000F0D43",  # mdi-air-filter
+      "\U000F1051",  # mdi-led-strip-variant
+      "\U000F03D7",  # mdi-package-variant-closed
+      "\U000F07D6",  # mdi-led-strip
+      "\U000F00AC",  # mdi-blinds-closed
+      "\U000F1011",  # mdi-blinds-open
+      "\U000F1A4C",  # mdi-lightbulb-night
+      "\U000F1087",  # mdi-router-network
+      "\U000F036B",  # mdi-message-video
+      "\U000F0614",  # mdi-application-outline
+      "\U000F0141",  # mdi-chevron-left
+      "\U000F0143",  # mdi-chevron-up
+      "\U000F0140",  # mdi-chevron-down
+      "\U000F089E",  # mdi-battery
+      "\U000F07DE",  # mdi-filament
+      "\U000F0317",  # mdi-lan
+      "\U000F0425",  # mdi-power
+      "\U000F050F",  # mdi-thermometer
+      ]
+  - file: 'https://github.com/Templarian/MaterialDesign-Webfont/raw/v7.4.47/fonts/materialdesignicons-webfont.ttf'
+    id: icon_font_small
+    size: 30
+    bpp: 4
+    glyphs: [
+      "\U000F050F",  # mdi-thermometer
+      ]
+
+# Map icons to names
+substitutions:
+  lightbulb:      "\U000F0335"
+  printer:        "\U000F042B"
+  aircon:         "\U000F0D43"
+  ledstrip:       "\U000F1051"
+  led_strip_variant: "\U000F1051"
+  package:        "\U000F03D7"
+  lights:         "\U000F07D6"
+  blinds_closed:  "\U000F00AC"
+  blinds_open:    "\U000F1011"
+  nightlight:     "\U000F1A4C"
+  network:        "\U000F1087"
+  videocall:      "\U000F036B"
+  application:    "\U000F0614"
+  chevron_left:   "\U000F0141"
+  chevron_up:     "\U000F0143"
+  chevron_down:   "\U000F0140"
+  battery:        "\U000F089E"
+  filament:       "\U000F07DE"
+  lan:            "\U000F0317"
+  power:          "\U000F0425"
+  thermometer:    "\U000F050F"

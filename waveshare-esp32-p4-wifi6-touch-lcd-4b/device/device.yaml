@@ -1,0 +1,133 @@
+# =============================================================================
+# HARDWARE CONFIGURATION - Waveshare ESP32-P4-WIFI6-Touch-LCD-4B
+# =============================================================================
+# This file describes the physical Waveshare board so ESPHome knows how to
+# start the processor, display, touchscreen, backlight, and Wi-Fi coprocessor.
+#
+# Important hardware notes:
+# - The screen is a 4-inch 720x720 MIPI-DSI panel.
+# - Touch is handled by a GT911 chip on the I2C bus.
+# - Wi-Fi/Bluetooth come from the onboard ESP32-C6 helper chip via SDIO.
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# PROCESSOR / BOARD
+# -----------------------------------------------------------------------------
+esp32:
+  board: esp32-p4-evboard
+  flash_size: 32MB
+  cpu_frequency: 360MHz
+  engineering_sample: true
+  framework:
+    type: esp-idf
+    advanced:
+      enable_idf_experimental_features: true
+    sdkconfig_options:
+      CONFIG_SPIRAM_FETCH_INSTRUCTIONS: "y"
+      CONFIG_SPIRAM_RODATA: "y"
+
+
+# -----------------------------------------------------------------------------
+# ESPHOME DEVICE IDENTITY
+# -----------------------------------------------------------------------------
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+  area: ${room}
+
+
+# -----------------------------------------------------------------------------
+# ESP32-C6 WI-FI COPROCESSOR
+# -----------------------------------------------------------------------------
+# The ESP32-P4 chip itself has no Wi-Fi. The Waveshare board adds an ESP32-C6
+# module connected over SDIO, and ESPHome exposes that using esp32_hosted.
+esp32_hosted:
+  active_high: true
+  variant: ESP32C6
+  reset_pin: GPIO54
+  cmd_pin: GPIO19
+  clk_pin: GPIO18
+  d0_pin: GPIO14
+  d1_pin: GPIO15
+  d2_pin: GPIO16
+  d3_pin: GPIO17
+
+
+# -----------------------------------------------------------------------------
+# PSRAM (External Graphics Memory)
+# -----------------------------------------------------------------------------
+psram:
+  speed: 200MHz
+
+
+# -----------------------------------------------------------------------------
+# OVER THE AIR UPDATES / API / LOGGING
+# -----------------------------------------------------------------------------
+ota:
+  - platform: esphome
+
+api:
+
+logger:
+  hardware_uart: UART0
+
+
+# -----------------------------------------------------------------------------
+# POWER FOR THE MIPI-DSI DISPLAY PHY
+# -----------------------------------------------------------------------------
+esp_ldo:
+  - channel: 3
+    voltage: 2.5V
+
+
+# -----------------------------------------------------------------------------
+# BACKLIGHT CONTROL
+# -----------------------------------------------------------------------------
+# The Waveshare 4B backlight is driven by GPIO26. It is inverted, so ESPHome
+# needs to treat "on" and "off" the opposite way around at the pin level.
+output:
+  - platform: ledc
+    id: backlight_output
+    pin: GPIO26
+    frequency: 100Hz
+    inverted: true
+    min_power: 0.0
+    max_power: 0.8
+
+
+# -----------------------------------------------------------------------------
+# I2C BUS (Touchscreen Communication)
+# -----------------------------------------------------------------------------
+i2c:
+  id: touchscreen_bus
+  sda: GPIO7
+  scl: GPIO8
+  scan: true
+  frequency: 400kHz
+
+
+# -----------------------------------------------------------------------------
+# TOUCHSCREEN (GT911 Controller)
+# -----------------------------------------------------------------------------
+touchscreen:
+  - platform: gt911
+    id: my_touchscreen
+    i2c_id: touchscreen_bus
+    display: my_display
+
+
+# -----------------------------------------------------------------------------
+# DISPLAY (MIPI-DSI 720x720 LCD)
+# -----------------------------------------------------------------------------
+# ESPHome has a built-in board profile for this Waveshare panel. That profile
+# supplies the panel timings and dimensions; GPIO27 resets the display.
+display:
+  - platform: mipi_dsi
+    id: my_display
+    model: WAVESHARE-P4-86-PANEL
+    reset_pin:
+      number: GPIO27
+      inverted: false
+    update_interval: never
+    auto_clear_enabled: false

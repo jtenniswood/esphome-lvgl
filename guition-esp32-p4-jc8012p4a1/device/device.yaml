@@ -107,7 +107,6 @@ display:
     reset_pin: GPIO27
     update_interval: 17ms
     id: my_display
-    rotation: 180
     auto_clear_enabled: false
     color_order: RGB
     dimensions:
